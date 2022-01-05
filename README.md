@@ -15,7 +15,7 @@ dotnet --version
 # dotnet new webApp -o myWebApp --no-https
 
 # Clone project
-TODO
+git clone https://github.com/xdevops-caj-dotnet/myWebApp.git
 
 # Launch the WebApp
 cd myWebApp
@@ -32,21 +32,25 @@ export GUID=will
 oc new-project ${GUID}-dotnet-demo
 
 # Ensure 'dotnet:6.0-ubi8' builder image stream tag exist
+# Import builder image if necessary, please refer to troubleshooting
 oc get imagestreamtag  -n openshift | grep 'dotnet:6.0-ubi8'
 
 # Create application by 'dotnet:6.0-ubi8' builder image stream tag
-oc new-app dotnet:6.0-ubi8~. --name my-web-app
+oc new-app dotnet:6.0-ubi8~https://github.com/xdevops-caj-dotnet/myWebApp.git --name my-web-app
 
+# Check build logs
 oc logs -f bc/my-web-app
 
 # Expose service
+oc get svc
+oc expose svc my-web-app
 
-
-# Check route
+# Check route of the WebApp
+oc get route
 
 ```
 
-Access the WebApp by browser.
+Access the WebApp by browser, Example: <http://my-web-app-will-dotnet-demo.apps.<CLUSTER_DOMAIN>/>
 
 
 ## Troubleshooting
