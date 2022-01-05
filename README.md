@@ -74,3 +74,4 @@ References:
 
 - [Run .Net code on Red Hat OpenShift Container Platform on Mac OS](https://cloud.redhat.com/blog/run-.net-code-on-red-hat-openshift-container-platform-on-mac-os)
 - [.NET Core Sample App for OpenShift](https://github.com/redhat-developer/s2i-dotnetcore-ex)
+- [Red Hat .NET container images](https://catalog.redhat.com/software/containers/search?q=dotnet&p=1)
