@@ -52,6 +52,26 @@ oc get route
 
 Access the WebApp by browser, Example: <http://my-web-app-will-dotnet-demo.apps.${CLUSTER_DOMAIN}>
 
+## Configure GitHub webhook
+
+
+Open the build config of `my-web-app`, and copy the GitHub webhook URL with secret.
+
+In GitHub, open the `myWebApp` project settings, and open Webhooks.
+
+Add webhook:
+- Pyaload URL: the above GitHub webhook url
+- Content type: `application/json`
+- Secret: leave empty
+- SSL verification: Disable for sel-signed cert
+- Check "Just the push event"
+- Check "Active"
+
+Try to push something to the GitHub repository to verify if webhook will auto trigger re-build and re-deployment.
+
+```bash
+watch oc get pods
+```
 
 ## Troubleshooting
 
