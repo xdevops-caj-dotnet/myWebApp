@@ -50,7 +50,7 @@ oc get route
 
 ```
 
-Access the WebApp by browser, Example: <http://my-web-app-will-dotnet-demo.apps.${CLUSTER_DOMAIN}>
+Access the WebApp by browser, Example: <http://my-web-app-will-dotnet-demo.${CLUSTER_DOMAIN}>
 
 ## Configure GitHub webhook
 
