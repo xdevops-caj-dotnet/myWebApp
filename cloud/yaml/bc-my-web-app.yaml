@@ -1,0 +1,42 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  labels:
+    app: my-web-app
+    app.kubernetes.io/component: my-web-app
+    app.kubernetes.io/instance: my-web-app
+  name: my-web-app
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: my-web-app:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      uri: https://github.com/xdevops-caj-dotnet/myWebApp.git
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: dotnet:6.0-ubi8
+        namespace: openshift
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - github:
+      secret: AQqlu_h-eYy3rrWYbXXS
+    type: GitHub
+  - generic:
+      secret: aMSfxRuGI2IessrIaB5A
+    type: Generic
+  - type: ConfigChange
+  - imageChange: {}
+    type: ImageChange

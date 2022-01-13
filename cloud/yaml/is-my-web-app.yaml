@@ -1,0 +1,14 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  labels:
+    app: my-web-app
+    app.kubernetes.io/component: my-web-app
+    app.kubernetes.io/instance: my-web-app
+  name: my-web-app
+spec:
+  lookupPolicy:
+    local: false
+

@@ -144,6 +144,56 @@ oc set resources deployment my-web-app \
   --requests=cpu=100m,memory=512Mi
 ```
 
+## Export Kuberentes resources as YAML files
+
+Export Kubernetes resources as YAML files:
+```bash
+# Create YAML files folder
+mkdir -p cloud/yaml
+cd cloud/yaml
+
+# Check Kubernetes resources
+oc get all -o name \
+  | grep -v pod \
+  | grep -v "build.build.openshift.io" \
+  | grep -v "replicaset" \
+  | grep -v "replicationcontroller"
+
+# Export Kuberentes resources
+oc get service/my-web-app -o yaml > svc-my-web-app.yaml
+oc get deployment.apps/my-web-app -o yaml > deploy-my-web-app.yaml
+oc get buildconfig.build.openshift.io/my-web-app -o yaml > bc-my-web-app.yaml
+oc get imagestream.image.openshift.io/my-web-app -o yaml > is-my-web-app.yaml
+oc get route.route.openshift.io/my-web-app -o yaml > route-my-web-app.yaml
+
+```
+Remove temp (e.g. `managedFields`, `status`) and namespace specific fields in exported yaml files.
+
+## Clean and redeploy resources (optional)
+
+```bash
+# Delete project to clean resources
+oc delete project "$GUID-dotnet-demo"
+
+# Recreate project
+oc new-project "$GUID-dotnet-demo"
+oc project "$GUID-dotnet-demo"
+
+# Run on project folder
+oc apply -f cloud/yaml
+
+```
+
+Verify:
+```bash
+# Watch until all pods are ready
+watch oc get pods
+
+# Access the app route by browser once all pods are ready
+oc get route
+```
+
+
 ## Troubleshooting
 
 ### Import .NET 6.0 images into OpenShift
