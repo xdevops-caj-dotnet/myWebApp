@@ -73,6 +73,35 @@ Try to push something to the GitHub repository to verify if webhook will auto tr
 watch oc get pods
 ```
 
+## Set Health check probes
+
+```bash
+oc set probe deployment todoitems --readiness \
+  --get-url=http://:8080/healthz \
+  --period-seconds=3 \
+  --initial-delay-seconds=5 \
+  --success-threshold=1 \
+  --failure-threshold=3 \
+  --timeout-seconds=1
+
+oc set probe deployment todoitems --liveness \
+  --get-url=http://:8080/healthz \
+  --period-seconds=3 \
+  --initial-delay-seconds=5 \
+  --success-threshold=1 \
+  --failure-threshold=3 \
+  --timeout-seconds=1
+
+oc set probe deployment todoitems --startup \
+  --get-url=http://:8080/healthz \
+  --period-seconds=10 \
+  --initial-delay-seconds=100 \
+  --success-threshold=1 \
+  --failure-threshold=30 \
+  --timeout-seconds=1
+
+```
+
 ## Troubleshooting
 
 ### Import .NET 6.0 images into OpenShift
