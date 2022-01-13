@@ -75,8 +75,16 @@ watch oc get pods
 
 ## Set Health check probes
 
+Add [basic health check](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-6.0#basic-health-probe) in `Program.cs`, and test locally.
+
 ```bash
-oc set probe deployment todoitems --readiness \
+curl --verbose http://localhost:{port}/healthz
+```
+
+Add Kuberentes health checks for `my-web-app` deployment:
+
+```bash
+oc set probe deployment my-web-app --readiness \
   --get-url=http://:8080/healthz \
   --period-seconds=3 \
   --initial-delay-seconds=5 \
@@ -84,7 +92,7 @@ oc set probe deployment todoitems --readiness \
   --failure-threshold=3 \
   --timeout-seconds=1
 
-oc set probe deployment todoitems --liveness \
+oc set probe deployment my-web-app --liveness \
   --get-url=http://:8080/healthz \
   --period-seconds=3 \
   --initial-delay-seconds=5 \
@@ -92,14 +100,48 @@ oc set probe deployment todoitems --liveness \
   --failure-threshold=3 \
   --timeout-seconds=1
 
-oc set probe deployment todoitems --startup \
+oc set probe deployment my-web-app --startup \
   --get-url=http://:8080/healthz \
   --period-seconds=10 \
-  --initial-delay-seconds=100 \
+  --initial-delay-seconds=30 \
   --success-threshold=1 \
   --failure-threshold=30 \
   --timeout-seconds=1
 
+```
+
+If changes code, need push codes to the code base, and then run `oc start-build my-web-app` to rebuild the image (will also redeploy once rebuilt).
+
+Verify the pods status:
+```bash
+watch oc get pods
+```
+
+Enter the pod container to test health check endpoint:
+```bash
+oc rsh <pod>
+curl --verbose http://localhost:8080/healthz
+```
+
+## Scale replicas
+Scale up:
+```bash
+oc scale --replicas=3 deployment my-web-app
+```
+
+Verify:
+```bash
+oc get deployment my-web-app
+
+watch oc get pods
+```
+
+## Set resources requests and limits
+
+```bash
+oc set resources deployment my-web-app \
+  --limits=cpu=200m,memory=512Mi \
+  --requests=cpu=100m,memory=512Mi
 ```
 
 ## Troubleshooting
